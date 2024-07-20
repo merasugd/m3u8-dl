@@ -1,0 +1,55 @@
+{
+    "source": {
+        "include": ["index.js", "package.json", "README.md"]
+    },
+    "plugins": ["plugins/markdown"],
+    "opts": {
+        "encoding": "utf8",
+        "readme": "./README.md",
+        "destination": ".",
+        "recurse": true,
+        "verbose": true,
+        "template": "./node_modules/clean-jsdoc-theme",
+        "theme_opts": {
+            "default_theme": "dark",
+            "menu": [
+                {
+                    "title": "Home",
+                    "link": "https://merasugd.github.io/m3u8-dl/"
+                },
+                {
+                    "title": "Gravatar",
+                    "link": "https://gravatar.com/squirrelinsightfulf47c74a51d"
+                },
+                {
+                    "title": "Github",
+                    "link": "https://github.com/merasugd/m3u8-dl"
+                },
+                {
+                    "title": "YouTube",
+                    "link": "https://www.youtube.com/@merasu_gd"
+                },
+                {
+                    "title": "Facebook",
+                    "link": "https://www.facebook.com/profile.php?id=61554338001508"
+                }
+            ],
+            "sections": ["Classes", "Modules", "Global"],
+            "meta": [
+                {
+                    "name": "author",
+                    "content": "MerasGD"
+                },
+                {
+                    "name": "description",
+                    "content": "Download m3u8 playlist to file"
+                }
+            ],
+            "footer": "Made by MerasGD"
+        }
+    },
+    "markdown": {
+        "hardwrap": false,
+        "idInHeadings": true
+    }
+}
