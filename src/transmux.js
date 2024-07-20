@@ -53,7 +53,7 @@ function ffmpegRun(args, ffmpegPath = ffmpeg) {
         })
         proc.on('close', () => resolve(100))
 
-        proc.stderr.on('data', (d) => console.log(d.toString()))
+        //proc.stderr.on('data', (d) => console.log(d.toString()))
     })
 }
 
