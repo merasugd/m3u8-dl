@@ -8,7 +8,7 @@ const error = require('./error');
 function dl(uri, out, retries = 3, backoff = 1000) {
     return new Promise(async (resolve) => {
         try {
-            if(fs.existsSync(out)) await fs.rm(out, { recursive: true, force: true });
+            if(fs.existsSync(out)) await fsp.rm(out, { recursive: true, force: true });
 
             let response = await axios({
                 method: 'GET',
@@ -31,7 +31,7 @@ function dl(uri, out, retries = 3, backoff = 1000) {
         } catch (e) {
             if (retries > 0) {
                 await new Promise(res => setTimeout(res, backoff));
-                return resolve(dl(uri, out, retries - 1, backoff * 2));
+                return resolve(await dl(uri, out, retries - 1, backoff * 2));
             }
             resolve(await secondDl(uri, out, retries, backoff));
         }
@@ -40,7 +40,7 @@ function dl(uri, out, retries = 3, backoff = 1000) {
 
 function secondDl(uri, out, retries = 3, backoff = 1000) {
     return new Promise(async (resolve) => {
-        if(fs.existsSync(out)) await fs.rm(out, { recursive: true, force: true });
+        if(fs.existsSync(out)) await fsp.rm(out, { recursive: true, force: true });
 
         let stream = fs.createWriteStream(out);
 
@@ -55,7 +55,7 @@ function secondDl(uri, out, retries = 3, backoff = 1000) {
         stream.on('error', async (err) => {
             if (retries > 0) {
                 await new Promise(res => setTimeout(res, backoff));
-                return resolve(secondDl(uri, out, retries - 1, backoff * 2));
+                return resolve(await secondDl(uri, out, retries - 1, backoff * 2));
             }
             resolve(new error(err));
         });
