@@ -25,7 +25,7 @@ module.exports = function(input, output, ffmpegPath = ffmpeg, captions = [], cac
             await captionsLoop(output, cache, ffmpegPath, captions, 0);
         }
 
-        if (fs.existsSync(cache)) await fsp.rm(cache, { recursive: true, force: true });
+        if(fs.existsSync(cache)) await fsp.rm(cache, { recursive: true, force: true });
 
         return resolve(100)
     })

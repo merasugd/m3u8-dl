@@ -1,4 +1,5 @@
 const fs = require('fs');
+const fsp = require('fs/promises');
 const axios = require('axios');
 const request = require('request');
 
@@ -7,6 +8,8 @@ const error = require('./error');
 function dl(uri, out, retries = 3, backoff = 1000) {
     return new Promise(async (resolve) => {
         try {
+            if(fs.existsSync(out)) await fs.rm(out, { recursive: true, force: true });
+
             let response = await axios({
                 method: 'GET',
                 url: uri,
@@ -37,6 +40,8 @@ function dl(uri, out, retries = 3, backoff = 1000) {
 
 function secondDl(uri, out, retries = 3, backoff = 1000) {
     return new Promise(async (resolve) => {
+        if(fs.existsSync(out)) await fs.rm(out, { recursive: true, force: true });
+
         let stream = fs.createWriteStream(out);
 
         request(uri, {

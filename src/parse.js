@@ -18,9 +18,6 @@ module.exports = function hlshandle(streamUrl, quality = 'highest', cache = path
 
         let main = path.join(cache, 'index.m3u8')
         let fetchedPath = path.join(cache, 'fetched.m3u8')
-
-        if(fs.existsSync(main)) await fsp.rm(main, { force: true })
-        if(fs.existsSync(fetchedPath)) await fsp.rm(fetchedPath, { force: true })
         
         let dl_r1 = await dl.basicDL(streamUrl, main)
         if(dl_r1 !== 100) return resolve(dl_r1)
