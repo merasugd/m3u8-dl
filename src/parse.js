@@ -17,8 +17,7 @@ module.exports = function hlshandle(streamUrl, quality = 'highest', cache = path
         let secondParser = new Parser()
 
         let main = path.join(cache, '.master.m3u8')
-        let fetchedPath = path.join(cache, '.segments.m3u8')
-        
+              
         let dl_r1 = await dl.basicDL(streamUrl, main)
         if(dl_r1 !== 100) return resolve(dl_r1)
         
@@ -46,20 +45,19 @@ module.exports = function hlshandle(streamUrl, quality = 'highest', cache = path
             let msg_fetched = all_q.find(v => v === quality) ? 'BAD SOURCE' : `QUALITY CHOSEN NOT in [${all_q.join(', ')}]`
             if(!fetched) return resolve(new error(`BAD QUALITY [${quality}]: ${msg_fetched}`))
 
+            if(fs.existsSync(main)) await fsp.rm(main, { recursive: true, force: true })
+            
             let uri = new URL(fetched.uri, streamUrl).href
 
-            let dl_r2 = await dl.basicDL(uri, fetchedPath)
+            let dl_r2 = await dl.basicDL(uri, main)
             if(dl_r2 !== 100) return resolve(dl_r2)
 
-            secondParser.push(fs.readFileSync(fetchedPath).toString())
+            secondParser.push(fs.readFileSync(main).toString())
             secondParser.end()
 
             let fetchedParsed = secondParser.manifest
 
             if(fetchedParsed.segments && fetchedParsed.segments.length > 0) {
-                if(fs.existsSync(main)) await fsp.rm(main, { force: true })
-                if(fs.existsSync(fetchedPath)) await fsp.rm(fetchedPath, { force: true })
-                
                 return resolve(fetchedParsed.segments)
             } else if(fetchedParsed.playlists && Array.isArray(fetchedParsed.playlists) && fetchedParsed.playlists.length > 0) {
                 return resolve(await hlshandle(uri, quality, cache))
