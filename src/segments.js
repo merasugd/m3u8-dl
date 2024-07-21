@@ -8,11 +8,6 @@ const error = require('./error');
 
 module.exports = function segment(segments = [], streamUrl, cache = path.join(require('os').tmpdir(), 'm3u8dl'), maxConnections = 20, cb = console.log) {
     return new Promise(async (resolve) => {
-
-        if (fs.existsSync(cache)) await fsp.rm(cache, { recursive: true, force: true });
-        
-        fs.mkdirSync(cache);
-
         cb('start');
 
         let total = segments.length;
